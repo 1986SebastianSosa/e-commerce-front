@@ -97,9 +97,6 @@ function ReviewForm({ handleNext, handleBack, setOrder }) {
                 );
               })}
 
-              {/* <Box display="flex" flexDirection="column" marginTop="1rem"> */}
-
-              {/* </Box> */}
               <Grid container justifyContent="space-between" mb={5}>
                 <Grid item xs={2}>
                   <Typography fontWeight="600" fontSize="1.3rem">
@@ -121,7 +118,6 @@ function ReviewForm({ handleNext, handleBack, setOrder }) {
               </Grid>
             </Grid>
 
-            {/* <Box sx={{ marginY: "1rem" }}> */}
             <Grid container justifyContent="flex-start">
               <Grid item xs={9} textAlign="left">
                 <Typography variant="h6">Address</Typography>

@@ -7,6 +7,8 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { getStyle } from "./getStyles";
+import placeHolder from "../../../assets/images/img-placeholder.png";
 
 const ProductCard = ({ product, display }) => {
   const navigate = useNavigate();
@@ -31,22 +33,8 @@ const ProductCard = ({ product, display }) => {
 const ListView = ({ product, handleNavigate }) => {
   const { name, imgUrl, price, id, description } = product;
   const theme = useTheme();
+  const listStyle = getStyle("list", theme);
 
-  const cardStyle = {
-    position: "relative",
-    display: "flex",
-    cursor: "pointer",
-    transition: "0.2s",
-    padding: "0.5rem",
-    borderRadius: "15px",
-    ":hover": {
-      backgroundColor: "white",
-      transition: "0.2s",
-      transform: "translateY(-5px)",
-      boxShadow: "2px 2px 5px 5px rgb(0,0,0,0.22)",
-      border: `thick double ${theme.palette.primary.main}`,
-    },
-  };
   return (
     <>
       <Grid
@@ -55,8 +43,8 @@ const ListView = ({ product, handleNavigate }) => {
         onClick={handleNavigate}
         elevation={1}
         sx={{
+          ...listStyle,
           paddingX: "0px",
-          ...cardStyle,
           boxShadow:
             " 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
           width: "99%",
@@ -65,17 +53,31 @@ const ListView = ({ product, handleNavigate }) => {
         }}
       >
         <Grid item xs={4} md={2} sx={{ height: "100%", p: { md: 2, xs: 1 } }}>
-          <img
-            srcSet={process.env.REACT_APP_IMAGE_HOSTING_URL + imgUrl[0]}
-            alt={name}
-            style={{
-              borderRadius: "5px",
-              width: "100%",
-              height: "100%",
-              objectFit: "contain",
-              objectPosition: "center",
-            }}
-          />
+          {imgUrl[0] ? (
+            <img
+              srcSet={process.env.REACT_APP_IMAGE_HOSTING_URL + imgUrl[0]}
+              alt={name}
+              style={{
+                borderRadius: "5px",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                objectPosition: "center",
+              }}
+            />
+          ) : (
+            <img
+              src={placeHolder}
+              alt=""
+              style={{
+                borderRadius: "5px",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                objectPosition: "center",
+              }}
+            />
+          )}
         </Grid>
         <Grid
           item
@@ -128,46 +130,44 @@ const ListView = ({ product, handleNavigate }) => {
 const ModuleView = ({ product, handleNavigate }) => {
   const theme = useTheme();
   const { name, imgUrl, price, id } = product;
-
-  const cardStyle = {
-    marginBottom: "2rem",
-    display: "flex",
-    cursor: "pointer",
-    transition: "0.2s",
-    padding: "0.5rem",
-    borderRadius: "15px",
-    border: "thick double white",
-    ":hover": {
-      backgroundColor: "white",
-      transition: "0.2s",
-      transform: "translateY(-5px)",
-      boxShadow: "2px 2px 5px 1px rgb(0,0,0,0.22)",
-      border: `thick double ${theme.palette.primary.main}`,
-    },
-  };
+  const moduleStyle = getStyle("module", theme);
 
   return (
     <Card
       onClick={handleNavigate}
       sx={{
-        ...cardStyle,
+        ...moduleStyle,
         display: "block",
         width: "200px",
         backgroundColor: "white",
       }}
     >
       <CardMedia p={1} sx={{ height: "170px" }}>
-        <img
-          srcSet={process.env.REACT_APP_IMAGE_HOSTING_URL + imgUrl[0]}
-          alt={name}
-          style={{
-            borderRadius: "5px",
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            objectPosition: "center",
-          }}
-        />
+        {imgUrl[0] ? (
+          <img
+            srcSet={process.env.REACT_APP_IMAGE_HOSTING_URL + imgUrl[0]}
+            alt={name}
+            style={{
+              borderRadius: "5px",
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "center",
+            }}
+          />
+        ) : (
+          <img
+            src={placeHolder}
+            alt=""
+            style={{
+              borderRadius: "5px",
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              objectPosition: "center",
+            }}
+          />
+        )}
       </CardMedia>
       <CardHeader
         sx={{ paddingY: "0" }}

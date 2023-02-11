@@ -1,0 +1,15 @@
+.carouselBox {
+  margin: 0 auto;
+  width: 250px;
+  height: 400px;
+  padding: 2rem;
+  margin: 0;
+}
+
+.carouselBox:hover {
+  cursor: pointer;
+}
+
+.carouselBox img {
+  width: 100%;
+}

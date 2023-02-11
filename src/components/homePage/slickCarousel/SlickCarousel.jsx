@@ -5,10 +5,11 @@ import Slider from "react-slick";
 import { Box, Button, Typography } from "@mui/material";
 import "./slickCarousel.css";
 import { useTheme } from "@emotion/react";
-import { addItemToCart } from "../../Redux/cart/slice";
+import { addItemToCart } from "../../../Redux/cart/slice";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { settings } from "./settings";
 
 const SlickCarousel = ({ starredProducts }) => {
   const dispatch = useDispatch();
@@ -18,56 +19,6 @@ const SlickCarousel = ({ starredProducts }) => {
   };
 
   const theme = useTheme();
-  const settings = {
-    arrows: false,
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    autoplay: true,
-    centerMode: true,
-    adaptiveHeight: true,
-    appendDots: (dots) => <ul style={{ padding: "1rem" }}>{dots}</ul>,
-    responsive: [
-      {
-        breakpoint: 1500,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 1200,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 900,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          infinite: true,
-          dots: true,
-        },
-      },
-    ],
-  };
 
   if (starredProducts.length === 0) return <></>;
 
@@ -78,11 +29,19 @@ const SlickCarousel = ({ starredProducts }) => {
           process.env.REACT_APP_IMAGE_HOSTING_URL + product.imgUrl[0];
         return (
           <Box className="carouselBox" key={product.name}>
-            <Box p={1} onClick={() => navigate(`/product/${product.slug}`)}>
+            <Box
+              p={1}
+              sx={{
+                height: "70%",
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={() => navigate(`/product/${product.slug}`)}
+            >
               <img
                 src={
                   !product.imgUrl[0]
-                    ? require("../../assets/images/img-placeholder.png")
+                    ? require("../../../assets/images/img-placeholder.png")
                     : imageUrl
                 }
                 alt={product.name}

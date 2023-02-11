@@ -10,7 +10,7 @@ import {
   Box,
   Grid,
   Container,
-  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import Typography from "@mui/material/Typography";
@@ -21,9 +21,9 @@ import { loginUser } from "../../services/loginServices";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { loginValidationSchema } from "./loginValidationSchema";
-import MySnackBar from "../snackBar/MySnackBar";
 import { Twitter } from "@mui/icons-material";
 import Google from "../../assets/icons/google_icon.png";
+import { categoryBtnStyles } from "./styles";
 
 export default function Login() {
   const theme = useTheme();
@@ -33,44 +33,26 @@ export default function Login() {
   const [params] = useSearchParams();
   const routePath = params.get("routePath");
 
-  const [openSnack, setOpenSnack] = useState(false);
-  const [messageSnack, setMessageSnack] = useState("");
-  const [severitySnack, setSeveritySnack] = useState("");
-
-  const handleOpenSnack = (message, severity) => {
-    setMessageSnack(message);
-    setSeveritySnack(severity);
-    setOpenSnack(true);
-  };
-
-  const handleCloseSnack = () => setOpenSnack(false);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const categoryBtnStyles = {
-    bgcolor: "primary.main",
-    border: `1px solid ${theme.palette.primary.light}`,
-    borderRadius: "15px",
-    color: "white",
-    "&:hover": {
-      color: "primary",
-    },
-  };
-
   const handleLogin = async ({ email, password }) => {
     setError(false);
-    const response = await loginUser(email, password);
-    if (Object.entries(response).length === 0) return setError(true);
-    dispatch(loginUserReducer(response));
-    navigate(!routePath ? "/welcome" : `/${routePath}`, { replace: true });
+    try {
+      const response = await loginUser(email, password);
+      if (Object.entries(response).length === 0) return setError(true);
+      dispatch(loginUserReducer(response));
+      navigate(!routePath ? "/welcome" : `/${routePath}`, { replace: true });
+    } catch (error) {
+      setError(true);
+    }
   };
 
   const formik = useFormik({
     initialValues: {
-      email: "user@user.com",
-      password: "12345678",
+      email: "",
+      password: "",
     },
     validationSchema: loginValidationSchema,
     onSubmit: (values) => handleLogin(values),
@@ -183,9 +165,12 @@ export default function Login() {
                     fullWidth
                     type="submit"
                     variant="contained"
-                    sx={{ ...categoryBtnStyles }}
+                    sx={{
+                      ...categoryBtnStyles,
+                      border: `1px solid ${theme.palette.primary.light}`,
+                    }}
                   >
-                    Sign In
+                    Login
                   </Button>
                 </Box>
                 <NavLink to="/register" style={{ textDecoration: "none" }}>
@@ -193,58 +178,62 @@ export default function Login() {
                     disableElevation
                     fullWidth
                     variant="contained"
-                    sx={{ ...categoryBtnStyles }}
+                    sx={{
+                      ...categoryBtnStyles,
+                      border: `1px solid ${theme.palette.primary.light}`,
+                    }}
                   >
-                    Sign Up
+                    Register
                   </Button>
                 </NavLink>
 
                 <Divider sx={{ py: "2rem", color: "black" }}>OR</Divider>
                 <Box paddingBottom={2} alignItems="center">
-                  <Button
-                    variant="outlined"
-                    sx={{ color: "text.primary", width: "100%" }}
-                    onClick={() =>
-                      handleOpenSnack(
-                        "this functions is out of scope",
-                        "warning"
-                      )
+                  <Tooltip
+                    sx={{ bgcolor: "red" }}
+                    title={
+                      <Typography>
+                        This functionality is beyond the scope of this project
+                      </Typography>
                     }
+                    arrow
                   >
-                    <img
-                      src={Google}
-                      alt="Google Icon"
-                      style={{ width: "20.92px", marginRight: "5px" }}
-                    />
-                    <span>Sign in with Google</span>
-                  </Button>
+                    <Button
+                      variant="outlined"
+                      sx={{ color: "text.primary", width: "100%" }}
+                    >
+                      <img
+                        src={Google}
+                        alt="Google Icon"
+                        style={{ width: "20.92px", marginRight: "5px" }}
+                      />
+                      <span>Sign in with Google</span>
+                    </Button>
+                  </Tooltip>
                 </Box>
                 <Box alignItems="center">
-                  <Button
-                    variant="outlined"
-                    sx={{ color: "text.primary", width: "100%" }}
-                    onClick={() =>
-                      handleOpenSnack(
-                        "this functions is out of scope",
-                        "warning"
-                      )
+                  <Tooltip
+                    title={
+                      <Typography>
+                        This functionality is beyond the scope of this project
+                      </Typography>
                     }
+                    arrow
                   >
-                    <Twitter sx={{ mr: "5px", color: "#00acee" }} /> Sign in
-                    with Twitter
-                  </Button>
+                    <Button
+                      variant="outlined"
+                      sx={{ color: "text.primary", width: "100%" }}
+                    >
+                      <Twitter sx={{ mr: "5px", color: "#00acee" }} /> Sign in
+                      with Twitter
+                    </Button>
+                  </Tooltip>
                 </Box>
               </form>
             </Box>
           </Grid>
         </Grid>
       </Container>
-      <MySnackBar
-        open={openSnack}
-        handleClose={handleCloseSnack}
-        message={messageSnack}
-        severity={severitySnack}
-      />
     </>
   );
 }

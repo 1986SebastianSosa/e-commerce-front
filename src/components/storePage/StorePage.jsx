@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   CssBaseline,
   Grid,
   Pagination,
@@ -8,7 +7,6 @@ import {
   ToggleButtonGroup,
   Typography,
   useTheme,
-  Popover,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
@@ -21,8 +19,13 @@ import { Container } from "@mui/system";
 import { useParams } from "react-router-dom";
 import "./StorePage.css";
 import { titleStyles } from "../muiStyles/muiStyles";
+import { categoryHeader } from "./utils/categoryHeader";
+import { categoryName } from "./utils/categoryName";
+import InfoIcon from "@mui/icons-material/Info";
+import { Puff } from "react-loader-spinner";
 
 const StorePage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [prodCount, setProdCount] = useState(0);
@@ -30,62 +33,32 @@ const StorePage = () => {
   const [viewDisplay, setViewDisplay] = useState("module");
 
   const theme = useTheme();
-
   const params = useParams();
-
-  const categoryName = () => {
-    if (
-      params.categoryName === "electric" ||
-      params.categoryName === "acoustic" ||
-      params.categoryName === "bass"
-    ) {
-      return (
-        params.categoryName.replace(
-          params.categoryName[0],
-          params.categoryName[0].toUpperCase()
-        ) + " Guitars"
-      );
-    }
-    return params.categoryName.replace(
-      params.categoryName[0],
-      params.categoryName[0].toUpperCase()
-    );
-  };
-  categoryName();
-
-  const categoryHeader = () => {
-    switch (params.categoryName) {
-      case "allproducts":
-        return "https://i.ibb.co/Bn5ppX0/pexels-pixabay-417451.jpg";
-      case "accesories":
-        return "https://i.ibb.co/LJBrFsL/header-accesories-2.webp";
-      case "effects":
-        return "https://i.ibb.co/1YCWdgd/header-effects-2.jpg";
-      case "bass":
-        return "https://i.ibb.co/vP0mBvP/header-bass-3.jpg";
-      case "electric":
-        return "https://i.ibb.co/kDd2DYm/header-guitar-2.webp";
-      case "acoustic":
-        return "https://i.ibb.co/6gkZ2yr/header-guitar-3.webp";
-      case "amplifier":
-        return "https://i.ibb.co/bLjyJbf/header-amp-1.jpg";
-      default:
-        return "https://i.ibb.co/bLjyJbf/header-amp-1.jpg";
-    }
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const getAllProducts = async () => {
-      const data = await fetchProducts(page);
-      setProducts(data.products);
-      setProdCount(data.count);
+      try {
+        const data = await fetchProducts(page);
+        setProducts(data.products);
+        setProdCount(data.count);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     const getProductsByCategory = async () => {
-      const data = await fetchProductsByCategory(params.categoryName, page);
-      setProducts(data.products);
-      setProdCount(data.count);
+      try {
+        const data = await fetchProductsByCategory(params.categoryName, page);
+        setProducts(data.products);
+        setProdCount(data.count);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     if (params.categoryName === "allproducts") {
       getAllProducts();
@@ -93,7 +66,7 @@ const StorePage = () => {
     } else {
       getProductsByCategory();
 
-      setCategorySelected(categoryName);
+      setCategorySelected(categoryName(params.categoryName));
     }
   }, [params.categoryName, page]);
 
@@ -103,7 +76,7 @@ const StorePage = () => {
       <Grid container sx={{ marginBottom: "10vh" }}>
         <Grid item xs={12} className="heading">
           <img
-            srcSet={categoryHeader()}
+            srcSet={categoryHeader(params)}
             alt=""
             style={{ boxShadow: "inset 0px 54px 51px -6px rgba(0,0,0,0.64)" }}
           />
@@ -148,29 +121,57 @@ const StorePage = () => {
             </Box>
 
             <Box>
-              <Grid
-                container
-                width="100%"
-                justifyContent={{ xs: "center", sm: "space-between" }}
-              >
-                {products.map((product) => {
-                  return (
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                      display={viewDisplay}
+              {isLoading ? (
+                <Box
+                  minHeight="20rem"
+                  width="100%"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Puff
+                    color={theme.palette.secondary.main}
+                    height="100"
+                    width="100"
+                  />
+                </Box>
+              ) : (
+                <>
+                  <Grid
+                    container
+                    width="100%"
+                    justifyContent={{ xs: "center", sm: "space-between" }}
+                  >
+                    {products ? (
+                      products.map((product) => {
+                        return (
+                          <ProductCard
+                            key={product._id}
+                            product={product}
+                            display={viewDisplay}
+                          />
+                        );
+                      })
+                    ) : (
+                      <Box py={5} display="flex">
+                        <InfoIcon />
+                        <Typography ml={2}>
+                          It looks like the are no products to show right now.
+                          Try again later
+                        </Typography>
+                      </Box>
+                    )}
+                  </Grid>
+                  <Box display="flex" justifyContent="center">
+                    <Pagination
+                      page={page}
+                      count={Math.ceil(prodCount / 10)}
+                      shape="rounded"
+                      onChange={(e) => setPage(parseInt(e.target.textContent))}
                     />
-                  );
-                })}
-              </Grid>
-              <Box display="flex" justifyContent="center">
-                <Pagination
-                  page={page}
-                  count={Math.ceil(prodCount / 10)}
-                  shape="rounded"
-                  onChange={(e) => setPage(parseInt(e.target.textContent))}
-                />
-              </Box>
+                  </Box>
+                </>
+              )}
             </Box>
           </Grid>
         </Grid>

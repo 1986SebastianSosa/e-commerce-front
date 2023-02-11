@@ -10,7 +10,7 @@ import {
   Box,
   Grid,
 } from "@mui/material";
-import Typography from "@mui/material/Typography";
+import { Typography, Tooltip } from "@mui/material";
 import { Container } from "@mui/system";
 import { useTheme } from "@emotion/react";
 import { registerUser } from "../../services/registerServices";
@@ -18,27 +18,15 @@ import { loginUserReducer } from "../../Redux/user/slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import MySnackBar from "../snackBar/MySnackBar";
 import { Twitter } from "@mui/icons-material";
 import Google from "../../assets/icons/google_icon.png";
+import { categoryBtnStyles } from "./styles";
 
 export default function Register() {
   const theme = useTheme();
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const [openSnack, setOpenSnack] = useState(false);
-  const [messageSnack, setMessageSnack] = useState("");
-  const [severitySnack, setSeveritySnack] = useState("");
-
-  const handleOpenSnack = (message, severity) => {
-    setMessageSnack(message);
-    setSeveritySnack(severity);
-    setOpenSnack(true);
-  };
-
-  const handleCloseSnack = () => setOpenSnack(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -80,15 +68,15 @@ export default function Register() {
     onSubmit: (values) => handleRegister(values),
   });
 
-  const categoryBtnStyles = {
-    bgcolor: "primary.main",
-    border: `1px solid ${theme.palette.primary.light}`,
-    borderRadius: "15px",
-    color: "white",
-    "&:hover": {
-      color: "primary",
-    },
-  };
+  // const categoryBtnStyles = {
+  //   bgcolor: "primary.main",
+  //   border: `1px solid ${theme.palette.primary.light}`,
+  //   borderRadius: "15px",
+  //   color: "white",
+  //   "&:hover": {
+  //     color: "primary",
+  //   },
+  // };
   return (
     <>
       <Container sx={{ paddingY: "2rem", mt: "64px" }}>
@@ -115,7 +103,7 @@ export default function Register() {
                 alignItems: "center",
               }}
             >
-              <Typography variant="h4">Sign Up</Typography>
+              <Typography variant="h4">Register</Typography>
               <form onSubmit={formik.handleSubmit}>
                 <Box>
                   <TextField
@@ -223,43 +211,51 @@ export default function Register() {
                     variant="contained"
                     sx={{ ...categoryBtnStyles }}
                   >
-                    Sign Up
+                    Register
                   </Button>
 
                   <Divider sx={{ py: "2rem", color: "black" }}>OR</Divider>
                   <Box paddingBottom={2} alignItems="center">
-                    <Button
-                      variant="outlined"
-                      sx={{ color: "text.primary", width: "100%" }}
-                      onClick={() =>
-                        handleOpenSnack(
-                          "this functions is out of scope",
-                          "warning"
-                        )
+                    <Tooltip
+                      title={
+                        <Typography>
+                          This functionality is beyond the scope of this project
+                        </Typography>
                       }
+                      arrow
                     >
-                      <img
-                        src={Google}
-                        alt="Google Icon"
-                        style={{ width: "20.92px", marginRight: "5px" }}
-                      />{" "}
-                      <span>Sign in with Google</span>
-                    </Button>
+                      <Button
+                        variant="outlined"
+                        sx={{ color: "text.primary", width: "100%" }}
+                      >
+                        <img
+                          src={Google}
+                          alt="Google Icon"
+                          style={{ width: "20.92px", marginRight: "5px" }}
+                        />{" "}
+                        <span>Sign in with Google</span>
+                      </Button>
+                    </Tooltip>
                   </Box>
                   <Box alignItems="center">
-                    <Button
-                      variant="outlined"
-                      sx={{ color: "text.primary", width: "100%" }}
-                      onClick={() =>
-                        handleOpenSnack(
-                          "this functions is out of scope",
-                          "warning"
-                        )
+                    <Tooltip
+                      title={
+                        <Typography>
+                          This functionality is beyond the scope of this project
+                        </Typography>
                       }
+                      arrow
                     >
-                      <Twitter sx={{ marginRight: "5px", color: "#00acee" }} />{" "}
-                      Sign in with Twitter
-                    </Button>
+                      <Button
+                        variant="outlined"
+                        sx={{ color: "text.primary", width: "100%" }}
+                      >
+                        <Twitter
+                          sx={{ marginRight: "5px", color: "#00acee" }}
+                        />{" "}
+                        Sign in with Twitter
+                      </Button>
+                    </Tooltip>
                   </Box>
                 </Box>
               </form>
@@ -286,12 +282,6 @@ export default function Register() {
           />
         </Grid>
       </Container>
-      <MySnackBar
-        open={openSnack}
-        handleClose={handleCloseSnack}
-        message={messageSnack}
-        severity={severitySnack}
-      />
     </>
   );
 }
