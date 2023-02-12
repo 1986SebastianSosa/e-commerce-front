@@ -22,6 +22,8 @@ import { fetchOneProduct } from "../../services/apiServices";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../Redux/cart/slice";
 import { useTheme } from "@emotion/react";
+import imgPlaceHolder from "../../assets/images/img-placeholder.png";
+import { Placeholder } from "react-bootstrap";
 
 function ProductDetail() {
   const theme = useTheme();
@@ -29,13 +31,20 @@ function ProductDetail() {
   const { id: slug } = useParams();
   const [selectedProduct, setSelectedProduct] = useState({});
   const [qty, setQty] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const pathImageUrl = process.env.REACT_APP_IMAGE_HOSTING_URL;
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const getProduct = async () => {
-      const response = await fetchOneProduct(slug);
-      setSelectedProduct({ ...response.data });
+      try {
+        const response = await fetchOneProduct(slug);
+        setSelectedProduct(response.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     getProduct();
   }, [slug]);
@@ -76,7 +85,7 @@ function ProductDetail() {
           flexDirection="column"
           justifyContent="space-between"
         >
-          {Object.entries(selectedProduct).length === 0 ? (
+          {isLoading ? (
             <CircularProgress />
           ) : (
             <>
@@ -87,27 +96,20 @@ function ProductDetail() {
                   justifyContent: "center",
                 }}
               >
-                {selectedProduct.imgUrl.map((image, i) => {
-                  return (
-                    <img
-                      key={i}
-                      alt={`${selectedProduct.name}`}
-                      srcSet={pathImageUrl + selectedProduct.imgUrl[i]}
-                      style={{ ...carouselImgStyles }}
-                    />
-                  );
-                })}
-
-                {/* <img
-                  alt={`${selectedProduct.name}`}
-                  srcSet={pathImageUrl + selectedProduct.imgUrl[1]}
-                  style={{ ...carouselImgStyles }}
-                />
-                <img
-                  alt={`${selectedProduct.name}`}
-                  srcSet={pathImageUrl + selectedProduct.imgUrl[2]}
-                  style={{ ...carouselImgStyles }}
-                /> */}
+                {!selectedProduct.imgUrl[0] ? (
+                  <img src={imgPlaceHolder} />
+                ) : (
+                  selectedProduct.imgUrl.map((image, i) => {
+                    return (
+                      <img
+                        key={i}
+                        alt={`${selectedProduct.name}`}
+                        srcSet={pathImageUrl + selectedProduct.imgUrl[i]}
+                        style={{ ...carouselImgStyles }}
+                      />
+                    );
+                  })
+                )}
               </Box>
             </>
           )}
@@ -123,7 +125,6 @@ function ProductDetail() {
           >
             {selectedProduct.name}
           </Typography>
-          {/* </Grid> */}
 
           <Grid
             item

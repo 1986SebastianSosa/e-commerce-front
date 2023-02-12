@@ -31,9 +31,18 @@ const StorePage = () => {
   const [prodCount, setProdCount] = useState(0);
   const [categorySelected, setCategorySelected] = useState("All Products");
   const [viewDisplay, setViewDisplay] = useState("module");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const theme = useTheme();
   const params = useParams();
+
+  const handleWindowResize = () => {
+    setTimeout(() => {
+      setWindowWidth(window.innerWidth);
+    }, 1000);
+  };
+
+  window.addEventListener("resize", handleWindowResize);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -69,6 +78,10 @@ const StorePage = () => {
       setCategorySelected(categoryName(params.categoryName));
     }
   }, [params.categoryName, page]);
+
+  useEffect(() => {
+    windowWidth < 900 ? setViewDisplay("module") : setViewDisplay("list");
+  }, [windowWidth]);
 
   return (
     <>
@@ -109,7 +122,9 @@ const StorePage = () => {
                 exclusive
                 color="primary"
                 value={viewDisplay}
-                onChange={(e, newValue) => setViewDisplay(newValue)}
+                onChange={(e, newValue) =>
+                  setViewDisplay(newValue, windowWidth)
+                }
               >
                 <ToggleButton value="module">
                   <ViewModule fontSize="small" />
@@ -140,7 +155,7 @@ const StorePage = () => {
                   <Grid
                     container
                     width="100%"
-                    justifyContent={{ xs: "center", sm: "space-between" }}
+                    justifyContent={{ xs: "center", md: "space-between" }}
                   >
                     {products ? (
                       products.map((product) => {
@@ -149,6 +164,7 @@ const StorePage = () => {
                             key={product._id}
                             product={product}
                             display={viewDisplay}
+                            windowWidth={windowWidth}
                           />
                         );
                       })

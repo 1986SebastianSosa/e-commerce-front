@@ -3,7 +3,7 @@ export const titleStyles = {
 };
 
 export const subTitleStyles = {
-  fontSize: { xs: "1.2rem", md: "1.7rem" },
+  fontSize: { xs: "1.5rem", md: "1.7rem" },
 };
 
 export const categoryBtnStyles = {

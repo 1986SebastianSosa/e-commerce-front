@@ -7,6 +7,7 @@ import StepLabel from "@mui/material/StepLabel";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Container } from "@mui/material";
 import { getForms } from "./getForms";
+import "./checkout.css";
 
 export default function CheckOut() {
   const [activeStep, setActiveStep] = useState(0);
@@ -27,7 +28,7 @@ export default function CheckOut() {
   ];
 
   return (
-    <Container>
+    <Container className="checkout">
       <Box
         sx={{
           margin: "auto",

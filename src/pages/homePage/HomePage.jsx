@@ -92,6 +92,7 @@ const HomePage = () => {
               Music Inspires
             </Typography>
             <Box
+              width={{ xs: "100%", sm: "60%" }}
               m="auto"
               display="flex"
               flexDirection="column"
@@ -99,16 +100,21 @@ const HomePage = () => {
             >
               <Typography
                 variant="h2"
+                mb={2}
                 sx={{
                   ...subTitleStyles,
                   marginTop: "20px",
-                  textAlign: "center",
+                  textAlign: { xs: "left", sm: "center" },
+
+                  alignSelf: { xs: "left", sm: "center" },
                 }}
                 color={theme.palette.text.primary}
               >
                 Life without playing music is inconceivable for me.
               </Typography>
-              <Typography textAlign="start">- Albert Einstein</Typography>
+              <Typography width="100%" textAlign={{ xs: "left", sm: "right" }}>
+                - Albert Einstein
+              </Typography>
             </Box>
           </Box>
           <Box sx={{ paddingY: "3rem" }}>

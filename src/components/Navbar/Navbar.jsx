@@ -147,7 +147,6 @@ function Navbar() {
           <Container>
             <Toolbar
               disableGutters
-              label="cosopum"
               sx={{
                 width: "100%",
                 display: "flex",

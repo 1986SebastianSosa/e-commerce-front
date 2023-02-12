@@ -9,8 +9,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getStyle } from "./getStyles";
 import placeHolder from "../../../assets/images/img-placeholder.png";
+import { useState } from "react";
 
-const ProductCard = ({ product, display }) => {
+const ProductCard = ({ product, display, windowWidth }) => {
   const navigate = useNavigate();
 
   const handleNavigate = () => {
@@ -20,26 +21,35 @@ const ProductCard = ({ product, display }) => {
   return (
     <Grid item xs={display === "module" ? "auto" : 12}>
       {display === "module" ? (
-        <ModuleView product={product} handleNavigate={handleNavigate} />
+        <ModuleView
+          product={product}
+          handleNavigate={handleNavigate}
+          windowWidth={windowWidth}
+        />
       ) : (
         <>
-          <ListView product={product} handleNavigate={handleNavigate} />
+          <ListView
+            product={product}
+            handleNavigate={handleNavigate}
+            windowWidth={windowWidth}
+          />
         </>
       )}
     </Grid>
   );
 };
 
-const ListView = ({ product, handleNavigate }) => {
+const ListView = ({ product, handleNavigate, windowWidth }) => {
   const { name, imgUrl, price, id, description } = product;
+
   const theme = useTheme();
   const listStyle = getStyle("list", theme);
 
   return (
     <>
       <Grid
-        mb={2}
         container
+        mb={2}
         onClick={handleNavigate}
         elevation={1}
         sx={{
@@ -52,7 +62,12 @@ const ListView = ({ product, handleNavigate }) => {
           backgroundColor: "white",
         }}
       >
-        <Grid item xs={4} md={2} sx={{ height: "100%", p: { md: 2, xs: 1 } }}>
+        <Grid
+          item
+          xs={4}
+          md={2}
+          sx={{ height: "100%", py: { md: 2, xs: 1 }, px: 2 }}
+        >
           {imgUrl[0] ? (
             <img
               srcSet={process.env.REACT_APP_IMAGE_HOSTING_URL + imgUrl[0]}
@@ -97,11 +112,17 @@ const ListView = ({ product, handleNavigate }) => {
           >
             {name}
           </Typography>
-          <Grid item display="flex" sx={{ height: "100%" }} alignItems="center">
-            <Grid item xs={10} sx={{ textAlign: "left" }}>
+          <Grid
+            item
+            display="flex"
+            flexDirection={{ xs: "column", sm: "row" }}
+            sx={{ height: "100%", width: "100%" }}
+            alignItems="end"
+            justifyContent={{ xs: "center", sm: "end" }}
+          >
+            <Grid item xs={12} sm={10} sx={{ textAlign: "left" }}>
               <Typography
                 sx={{
-                  display: { xs: "none", md: "initial" },
                   textOverflow: "ellipsis",
                   overflow: "hidden",
                   height: "4rem",
@@ -109,11 +130,16 @@ const ListView = ({ product, handleNavigate }) => {
                 variant="p"
                 color={theme.palette.text.primary}
               >
-                {description.substring(0, 250)}...
+                {windowWidth > 900
+                  ? description.substring(0, 250)
+                  : description.substring(0, 120)}
+                ...
               </Typography>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={12} sm={2} p={1}>
               <Typography
+                position="relative"
+                bottom="0px"
                 fontFamily="number"
                 fontSize="1.2rem"
                 fontWeight="500"
@@ -127,7 +153,7 @@ const ListView = ({ product, handleNavigate }) => {
   );
 };
 
-const ModuleView = ({ product, handleNavigate }) => {
+const ModuleView = ({ product, handleNavigate, windowWidth }) => {
   const theme = useTheme();
   const { name, imgUrl, price, id } = product;
   const moduleStyle = getStyle("module", theme);
@@ -137,9 +163,8 @@ const ModuleView = ({ product, handleNavigate }) => {
       onClick={handleNavigate}
       sx={{
         ...moduleStyle,
-        display: "block",
-        width: "200px",
-        backgroundColor: "white",
+        justifyContent: "space-between",
+        mx: 2,
       }}
     >
       <CardMedia p={1} sx={{ height: "170px" }}>

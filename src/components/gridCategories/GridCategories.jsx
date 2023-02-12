@@ -1,35 +1,9 @@
 import { Box, Button, CssBaseline, Grid, Typography } from "@mui/material";
 import "./gridCategories.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { categories } from "./categories";
 
 const GridCategories = () => {
-  const categories = [
-    {
-      name: "Effects",
-      imageName: "pedals.png",
-    },
-    {
-      name: "Acoustic",
-      imageName: "acoustic.png",
-    },
-    {
-      name: "Electric",
-      imageName: "guitar.png",
-    },
-    {
-      name: "Bass",
-      imageName: "bass.png",
-    },
-    {
-      name: "Amplifier",
-      imageName: "amps.png",
-    },
-    {
-      name: "Accesories",
-      imageName: "accessories.png",
-    },
-  ];
-
   return (
     <Box
       width="100%"
@@ -106,13 +80,6 @@ const CategoryButton = ({ imgUri, categoryName }) => {
               },
             }}
           >
-            {/* <Link
-              style={{ textDecoration: "none" }}
-              to={`/store/${categoryName.replace(
-                categoryName[0],
-                categoryName[0].toLowerCase()
-              )}`}
-            > */}
             <Button
               fullWidth
               sx={{
@@ -129,7 +96,6 @@ const CategoryButton = ({ imgUri, categoryName }) => {
                 {categoryName}
               </Typography>
             </Button>
-            {/* </Link> */}
           </Box>
         </Box>
       </Box>

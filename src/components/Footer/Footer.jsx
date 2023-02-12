@@ -24,15 +24,14 @@ function Footer() {
 
   return (
     <Box
-      label="cosopum"
-      padding="2.5rem"
       paddingBottom="2rem"
       bgcolor="#000000"
       color="#F2DBB8"
-      sx={{ mt: "auto" }}
+      pt={5}
+      mt="auto"
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4}>
+        <Grid container>
           <Grid item xs={12} sm={3}>
             <Box textAlign="left" variant="h1" marginBottom={3}>
               <Link to="/" className="footerLink">

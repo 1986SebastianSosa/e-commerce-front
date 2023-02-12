@@ -30,7 +30,7 @@ const SlickCarousel = ({ starredProducts }) => {
         return (
           <Box className="carouselBox" key={product.name}>
             <Box
-              p={1}
+              p={{ xs: 0, sm: 1 }}
               sx={{
                 height: "70%",
                 display: "flex",
@@ -75,6 +75,7 @@ const SlickCarousel = ({ starredProducts }) => {
               >
                 <AddShoppingCartIcon />
                 <Typography
+                  display={{ xs: "none", sm: "block" }}
                   variant="p"
                   sx={{
                     fontSize: "1rem",
