@@ -1,5 +1,5 @@
 import AddressForm from "../../components/addressForm/AddressForm";
-import PaymentConfirmation from "../../components/paymentConfirmation/paymentConfirmation";
+import PaymentConfirmation from "../../components/PaymentConfirmation/paymentConfirmation";
 import PaymentForm from "../../components/paymentForm/PaymentForm";
 import ReviewForm from "../../components/reviewForm/ReviewForm";
 
