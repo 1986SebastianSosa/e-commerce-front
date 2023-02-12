@@ -1,9 +1,10 @@
-import axios from "axios";
+import axiosPrivate from "../api/axiosPrivate";
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const fetchProducts = async (page) => {
   try {
-    const response = await axios.get(`${API_URL}/product?page=${page}`);
+    const response = await axiosPrivate.get(`${API_URL}/product?page=${page}`);
     return response.data;
   } catch (error) {
     return error;
@@ -12,7 +13,7 @@ export const fetchProducts = async (page) => {
 
 export const fetchStarredProducts = async () => {
   try {
-    const response = await axios.get(`${API_URL}/product/starred`);
+    const response = await axiosPrivate.get(`${API_URL}/product/starred`);
     return response.data;
   } catch (error) {
     return error;
@@ -21,7 +22,7 @@ export const fetchStarredProducts = async () => {
 
 export const fetchOneProduct = async (slug) => {
   try {
-    const response = await axios.get(`${API_URL}/product/slug/${slug}`);
+    const response = await axiosPrivate.get(`${API_URL}/product/slug/${slug}`);
     return response;
   } catch (error) {
     return error;
@@ -30,7 +31,7 @@ export const fetchOneProduct = async (slug) => {
 
 export const fetchProductsByCategory = async (categoryName, page) => {
   try {
-    const response = await axios.get(
+    const response = await axiosPrivate.get(
       `${API_URL}/product/category/${categoryName}?page=${page}`
     );
     return response.data;
@@ -41,7 +42,7 @@ export const fetchProductsByCategory = async (categoryName, page) => {
 
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get(`${API_URL}/category`);
+    const response = await axiosPrivate.get(`${API_URL}/category`);
 
     return response.data;
   } catch (error) {
@@ -51,7 +52,7 @@ export const fetchCategories = async () => {
 
 export const fetchUser = async (id, accessToken) => {
   try {
-    const response = await axios.get(
+    const response = await axiosPrivate.get(
       `${API_URL}/user/${id}?accessToken=${accessToken}`
     );
     return response.data;
@@ -62,7 +63,10 @@ export const fetchUser = async (id, accessToken) => {
 
 export const updateUser = async (values, params) => {
   try {
-    const user = await axios.patch(`${API_URL}/user/${params.id}`, values);
+    const user = await axiosPrivate.patch(
+      `${API_URL}/user/${params.id}`,
+      values
+    );
   } catch (error) {
     return error;
   }
@@ -71,7 +75,7 @@ export const updateUser = async (values, params) => {
 export const postNewOrder = async (id, accessToken, data, totalPrice) => {
   const body = { ...data, totalPrice };
   try {
-    const response = await axios.post(
+    const response = await axiosPrivate.post(
       `${API_URL}/order/${id}?accessToken=${accessToken}`,
       body
     );
@@ -83,7 +87,7 @@ export const postNewOrder = async (id, accessToken, data, totalPrice) => {
 
 export const postResetDB = async () => {
   try {
-    const response = await axios.post(`${API_URL}/resetDataBase`);
+    const response = await axiosPrivate.post(`${API_URL}/resetDataBase`);
     return response.data;
   } catch (error) {}
 };
