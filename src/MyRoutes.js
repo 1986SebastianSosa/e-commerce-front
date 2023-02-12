@@ -1,15 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 import GridCategories from "./components/gridCategories/GridCategories";
-import HomePage from "./components/homePage/HomePage";
-import Login from "./components/login/Login";
-import Register from "./components/login/Register";
-import ProductDetail from "./components/productDetail/ProductDetail";
-import AboutUs from "./components/aboutUs/AboutUs";
-import StorePage from "./components/storePage/StorePage";
-import CheckOut from "./components/checkout/CheckOut";
-import ContactUs from "./components/ContactUs/ContactUs";
-import UserPage from "./components/userPage/UserPage";
-import Welcome from "./components/login/Welcome";
+import HomePage from "./pages/homePage/HomePage";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import ProductDetail from "./pages/productDetail/ProductDetail";
+import AboutUs from "./pages/aboutUs/AboutUs";
+import StorePage from "./pages/storePage/StorePage";
+import CheckOut from "./pages/checkout/CheckOut";
+import ContactUs from "./pages/contactUs/ContactUs";
+import UserPage from "./pages/userPage/UserPage";
+import Welcome from "./pages/login/Welcome";
 
 const MyRoutes = ({ type }) => {
   return (

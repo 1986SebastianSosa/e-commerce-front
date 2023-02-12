@@ -15,30 +15,32 @@ import { LoadingButton } from "@mui/lab";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useForm, Controller } from "react-hook-form";
 import MySnackBar from "../snackBar/MySnackBar";
+import { validationSchema } from "./validationChema";
+import { useFormik } from "formik";
+import { fields } from "./paymentFormFields";
 
 function PaymentForm({ handleNext, handleBack }) {
   const [isLoading, setIsLoading] = useState(false);
   const [showSnack, setShowSnack] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
   const [snackSeverity, setSnackSeverity] = useState("info");
-  const [dateExpired, setDateExpired] = useState(null);
-  const xs = useMediaQuery("(min-width:0)");
   const sm = useMediaQuery("(min-width:600px)");
 
   const handleCloseSnack = () => setShowSnack(false);
 
-  const { register, handleSubmit, control } = useForm({
-    defaultValues: {
+  const formik = useFormik({
+    initialValues: {
       name: "",
       cardNumber: "",
       expiredDate: "",
       cvv: "",
     },
+    validationSchema,
+    onSubmit: (values) => handleSubmit(values),
   });
 
-  const onSubmit = (d) => {
+  const handleSubmit = () => {
     setIsLoading(true);
     setTimeout(() => {
       setSnackMessage("Payment accepted");
@@ -56,14 +58,6 @@ function PaymentForm({ handleNext, handleBack }) {
 
   return (
     <>
-      {/* <Box
-        sx={{
-          width: "80%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-        }}
-      > */}
       <Container>
         <Grid container>
           <Grid item xs={12} mb={3}>
@@ -72,43 +66,13 @@ function PaymentForm({ handleNext, handleBack }) {
             </Typography>
           </Grid>
 
-          {/* <Box> */}
-          {/* <Grid item xs={12}>
-            <Typography
-              fontWeight="400"
-              variant="h6"
-              sx={{
-                display: "flex",
-                justifyContent: "flex-start",
-                mb: "10px",
-                width: "100%",
-              }}
-            >
-              Credit Card
-            </Typography>
-          </Grid> */}
-
-          {/* </Box> */}
           <Grid item xs={12} mb={2}>
             <img
               srcSet={require("../../assets/images/credit-card-logo.png")}
               alt={"cardLog0"}
             />
-            {/* <img
-            srcSet={require("../../assets/images/Paypal logo.png")}
-            alt={"cardLog0"}
-          /> */}
           </Grid>
-          {/* <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mb: "20px",
-          }}
-        > */}
 
-          {/* </Box> */}
-          {/* <Box> */}
           <Grid item>
             <Typography variant={sm ? "p" : "body2"}>
               This is a example form, please not enter your credit card number.
@@ -116,99 +80,73 @@ function PaymentForm({ handleNext, handleBack }) {
           </Grid>
         </Grid>
 
-        {/* </Box> */}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {" "}
-              <Controller
-                control={control}
-                name={"name"}
-                render={({ field: { onChange, value } }) => (
+            {fields.map((field) => {
+              return field.id !== "expiredDate" ? (
+                <Grid item xs={12}>
                   <TextField
+                    my={1}
                     variant="standard"
                     disabled={isLoading}
                     fullWidth
-                    label="Name*"
-                    value={value}
-                    onChange={onChange}
+                    id={field.id}
+                    label={field.label}
                     type="text"
-                    aria-describedby="name-helper"
+                    aria-describedby={field.ariaDescribedBy}
+                    value={formik.values[field.id]}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched[field.id] &&
+                      Boolean(formik.errors[field.id])
+                    }
+                    helperText={
+                      formik.touched[field.id] && formik.errors[field.id]
+                    }
                   />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Controller
-                control={control}
-                name={"cardNumber"}
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    sx={{ fontFamily: "number" }}
-                    disabled={isLoading}
-                    variant="standard"
-                    fullWidth
-                    label="CardNumber*"
-                    placeholder="66777677676678"
-                    value={value}
-                    onChange={onChange}
-                    type="text"
-                    aria-describedby="cardNumber-helper"
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              {" "}
-              <Controller
-                control={control}
-                name={"expiredDate"}
-                render={({ field: { onChange, value } }) => (
+                </Grid>
+              ) : (
+                <Grid item xs={12}>
                   <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
+                      id={field.id}
+                      name={field.id}
                       minDate={new Date()}
                       maxDate={new Date("2034-01-01T00:00:00.000")}
-                      label="Expire Date"
+                      label={field.label}
                       views={["month", "year"]}
-                      value={dateExpired}
-                      onChange={(newValue) => setDateExpired(newValue)}
-                      renderInput={(params) => (
-                        <TextField {...params} fullWidth variant="standard" />
-                      )}
+                      value={formik.values[field.value]}
+                      onChange={(newValue) =>
+                        formik.setFieldValue("expiredDate", newValue)
+                      }
+                      renderInput={(params) => {
+                        console.log(params);
+                        return (
+                          <TextField
+                            {...params}
+                            variant="standard"
+                            disabled={isLoading}
+                            fullWidth
+                            label={field.label}
+                            type="text"
+                            aria-describedby={field.ariaDescribedBy}
+                            error={
+                              formik.touched[field.id] &&
+                              Boolean(formik.errors[field.id])
+                            }
+                            helperText={
+                              formik.touched[field.id] &&
+                              formik.errors[field.id]
+                            }
+                          />
+                        );
+                      }}
                     />
                   </LocalizationProvider>
-                )}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Controller
-                control={control}
-                name={"cvv"}
-                render={({ field: { onChange, value } }) => (
-                  <TextField
-                    disabled={isLoading}
-                    variant="standard"
-                    label="CVV*"
-                    placeholder="323"
-                    fullWidth
-                    value={value}
-                    onChange={onChange}
-                    type="number"
-                    aria-describedby="cvv-helper"
-                  />
-                )}
-              />
-            </Grid>
+                </Grid>
+              );
+            })}
           </Grid>
-
-          {/* <Box
-            display="flex"
-            marginTop="1rem"
-            justifyContent="space-between"
-            alignItems="center"
-          > */}
-
-          {/* </Box> */}
 
           <FormGroup>
             <FormControlLabel
@@ -253,7 +191,6 @@ function PaymentForm({ handleNext, handleBack }) {
           handleClose={handleCloseSnack}
           severity={snackSeverity}
         />
-        {/* </Box> */}
       </Container>
     </>
   );

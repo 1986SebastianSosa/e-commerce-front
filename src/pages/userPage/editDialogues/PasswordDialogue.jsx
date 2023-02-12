@@ -8,24 +8,24 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { updateUser } from "./../../../services/apiServices";
+import { updateUser } from "../../../services/apiServices";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
 
-const AddressDialogue = ({ open, setOpen, address, setAddress }) => {
+const PasswordDialogue = ({ open, setOpen, password, setPassword, id }) => {
   const handleClose = () => setOpen(false);
   const params = useParams();
 
   const validationSchema = yup.object({
-    address: yup
-      .string("Enter your address")
-      .required("Your address is required"),
+    password: yup
+      .string("Enter your password")
+      .required("Your password is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      address: address,
+      password: password,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -37,28 +37,24 @@ const AddressDialogue = ({ open, setOpen, address, setAddress }) => {
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle sx={{ width: { xs: "20rem", sm: "30rem", md: "38rem" } }}>
-          Edit your address
-        </DialogTitle>
+        <DialogTitle>Edit your Password</DialogTitle>
         <form
           onSubmit={() => {
-            setAddress(formik.values.address);
             formik.handleSubmit();
           }}
         >
-          <DialogContent sx={{ width: "100%" }}>
+          <DialogContent>
             <TextField
               autoFocus
-              sx={{ width: { xs: "15rem", sm: "25rem", md: "32rem" } }}
+              fullWidth
               margin="dense"
-              id="address"
-              label="address"
-              type="text"
+              id="password"
+              label="password"
+              type="password"
               variant="standard"
-              value={formik.values.address}
               onChange={formik.handleChange}
-              error={formik.touched.address && Boolean(formik.errors.address)}
-              helperText={formik.touched.address && formik.errors.address}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             />
           </DialogContent>
           <DialogActions>
@@ -72,4 +68,4 @@ const AddressDialogue = ({ open, setOpen, address, setAddress }) => {
   );
 };
 
-export default AddressDialogue;
+export default PasswordDialogue;

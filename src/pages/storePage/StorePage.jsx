@@ -14,15 +14,15 @@ import {
   fetchProductsByCategory,
 } from "../../services/apiServices";
 import { ViewList, ViewModule } from "@mui/icons-material";
-import ProductCard from "./productCard/ProductCard";
 import { Container } from "@mui/system";
 import { useParams } from "react-router-dom";
-import "./StorePage.css";
-import { titleStyles } from "../muiStyles/muiStyles";
+import { titleStyles } from "../../style/muiStyles";
 import { categoryHeader } from "./utils/categoryHeader";
 import { categoryName } from "./utils/categoryName";
-import InfoIcon from "@mui/icons-material/Info";
 import { Puff } from "react-loader-spinner";
+import ProductCard from "./productCard/ProductCard";
+import InfoIcon from "@mui/icons-material/Info";
+import "./StorePage.css";
 
 const StorePage = () => {
   const [isLoading, setIsLoading] = useState(true);

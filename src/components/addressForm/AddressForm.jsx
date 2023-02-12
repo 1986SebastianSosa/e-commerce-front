@@ -9,12 +9,15 @@ import {
   Grid,
   Container,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { useFormik } from "formik";
 import { useDispatch } from "react-redux";
 import { updateOrderReducer } from "../../Redux/order/slice";
+import { fields } from "./addressFormFields";
+import { validationSchema } from "./validationSchema";
 
 function AddressForm({ handleNext }) {
   const dispatch = useDispatch();
+
   const buttonStyles = {
     ":hover": { transition: "0.2s", color: "white" },
   };
@@ -24,8 +27,8 @@ function AddressForm({ handleNext }) {
     handleNext();
   };
 
-  const { handleSubmit, control } = useForm({
-    defaultValues: {
+  const formik = useFormik({
+    initialValues: {
       firstName: "",
       lastName: "",
       addressLine: "",
@@ -34,8 +37,12 @@ function AddressForm({ handleNext }) {
       state: "",
       zip: "",
       country: "",
+      phone: "",
     },
+    validationSchema: validationSchema,
+    onSubmit: (values) => handleNextForm(values),
   });
+
   return (
     <>
       <Box sx={{ height: "100%", width: "100%" }}>
@@ -48,170 +55,33 @@ function AddressForm({ handleNext }) {
             justifyContent: "space-evenly",
           }}
         >
-          <form onSubmit={handleSubmit(handleNextForm)}>
+          <form onSubmit={formik.handleSubmit}>
             <Container>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <Controller
-                    rules={{ required: true }}
-                    control={control}
-                    name={"firstName"}
-                    sx={{ width: "100%" }}
-                    render={({ field }) => (
+                {fields.map((field) => {
+                  return (
+                    <Grid item xs={12} md={6} key={field.id}>
                       <TextField
                         variant="standard"
                         fullWidth
-                        label="Name*"
+                        id={field.id}
+                        label={field.label}
                         size="small"
-                        {...field}
                         type="text"
-                        aria-describedby="name-helper"
+                        aria-describedby={field.ariaDescribedBy}
+                        value={formik.values[field.id]}
+                        onChange={formik.handleChange}
+                        error={
+                          formik.touched[field.id] &&
+                          Boolean(formik.errors[field.id])
+                        }
+                        helperText={
+                          formik.touched[field.id] && formik.errors[field.id]
+                        }
                       />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Controller
-                    rules={{ required: true, min: 3 }}
-                    control={control}
-                    name={"lastName"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        label="Last name*"
-                        size="small"
-                        fullWidth
-                        value={value}
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="lastName-helper"
-                      />
-                    )}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Controller
-                    rules={{ required: true, min: 3 }}
-                    control={control}
-                    name={"addressLine"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        fullWidth
-                        label="Address Line*"
-                        size="small"
-                        value={value}
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="addressLine-helper"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Controller
-                    control={control}
-                    name={"addressLine2"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        fullWidth
-                        label="Address Line 2"
-                        size="small"
-                        value={value}
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="addressLine2-helper"
-                      />
-                    )}
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  {/* <Box display="flex" justifyContent="space-between"> */}
-                  <Controller
-                    rules={{ required: true, min: 3 }}
-                    control={control}
-                    name={"country"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        label="Country"
-                        size="small"
-                        fullWidth
-                        value={value}
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="country"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Controller
-                    rules={{ required: true, min: 3 }}
-                    control={control}
-                    name={"city"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        label="City"
-                        size="small"
-                        value={value}
-                        fullWidth
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="city-helper"
-                      />
-                    )}
-                  />
-                </Grid>
-
-                {/* </Box> */}
-
-                <Grid item xs={12} md={6}>
-                  {/* <Box display="flex" justifyContent="space-between"> */}
-                  <Controller
-                    rules={{ required: true, min: 3 }}
-                    control={control}
-                    name={"state"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        label="State/Province/Region"
-                        size="small"
-                        fullWidth
-                        value={value}
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="state"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  {" "}
-                  <Controller
-                    rules={{ required: true, min: 3 }}
-                    control={control}
-                    name={"zip"}
-                    render={({ field: { onChange, value } }) => (
-                      <TextField
-                        variant="standard"
-                        label="Zip/Postal Code"
-                        size="small"
-                        value={value}
-                        fullWidth
-                        onChange={onChange}
-                        type="text"
-                        aria-describedby="zip"
-                      />
-                    )}
-                  />
-                </Grid>
-
-                {/* </Box> */}
+                    </Grid>
+                  );
+                })}
               </Grid>
 
               <FormGroup>

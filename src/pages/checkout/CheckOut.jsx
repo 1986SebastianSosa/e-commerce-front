@@ -4,12 +4,9 @@ import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import PaymentForm from "../paymentForm/PaymentForm";
-import ReviewForm from "../reviewForm/ReviewForm";
-import AddressForm from "../addressForm/AddressForm";
-import PaymentConfirmation from "../PaymentConfirmation/paymentConfirmation";
-import { Container, StepIcon } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { Container } from "@mui/material";
+import { getForms } from "./getForms";
 
 export default function CheckOut() {
   const [activeStep, setActiveStep] = useState(0);
@@ -28,38 +25,6 @@ export default function CheckOut() {
     "Review your order",
     "Order Confirmation",
   ];
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  function getForms(step) {
-    switch (step) {
-      case 0:
-        return <AddressForm handleNext={handleNext} />;
-      case 1:
-        return <PaymentForm handleNext={handleNext} handleBack={handleBack} />;
-      case 2:
-        return (
-          <ReviewForm
-            handleNext={handleNext}
-            handleBack={handleBack}
-            setOrder={setOrderCreated}
-          />
-        );
-      case 3:
-        return <PaymentConfirmation order={orderCreated} />;
-      default:
-        return <h1>No more steps available</h1>;
-    }
-  }
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
 
   return (
     <Container>
@@ -82,7 +47,7 @@ export default function CheckOut() {
         <Box width="100%" marginBottom="1rem" sx={{ flexShrink: 1 }}>
           <Stepper activeStep={activeStep}>
             {sm ? (
-              steps.map((step, index) => {
+              steps.map((step) => {
                 return (
                   <Step key={step}>
                     <StepLabel>{step}</StepLabel>
@@ -104,7 +69,7 @@ export default function CheckOut() {
             width: "100%",
           }}
         >
-          {getForms(activeStep)}
+          {getForms(activeStep, setActiveStep, orderCreated, setOrderCreated)}
         </Paper>
       </Box>
     </Container>

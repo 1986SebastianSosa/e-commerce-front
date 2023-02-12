@@ -9,10 +9,10 @@ import {
 
 import React, { useEffect, useState } from "react";
 import { fetchStarredProducts } from "../../services/apiServices";
-import GridCategories from "../gridCategories/GridCategories";
+import GridCategories from "../../components/gridCategories/GridCategories";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-import { titleStyles, subTitleStyles } from "../muiStyles/muiStyles";
+import { titleStyles, subTitleStyles } from "../../style/muiStyles";
 import { ReactComponent as CreditCard } from "../../assets/images/creditCard.svg";
 import { ReactComponent as Truck } from "../../assets/images/truck.svg";
 import { ReactComponent as Shield } from "../../assets/images/shield.svg";

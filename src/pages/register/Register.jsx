@@ -1,4 +1,3 @@
-import "./Login.css";
 import { useFormik } from "formik";
 import { validationSchema } from "./validationSchema";
 import {
@@ -12,18 +11,17 @@ import {
 } from "@mui/material";
 import { Typography, Tooltip } from "@mui/material";
 import { Container } from "@mui/system";
-import { useTheme } from "@emotion/react";
 import { registerUser } from "../../services/registerServices";
 import { loginUserReducer } from "../../Redux/user/slice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Twitter } from "@mui/icons-material";
+import { categoryBtnStyles } from "../../components/login/styles";
 import Google from "../../assets/icons/google_icon.png";
-import { categoryBtnStyles } from "./styles";
+import "../login/login.css";
 
 export default function Register() {
-  const theme = useTheme();
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -68,15 +66,6 @@ export default function Register() {
     onSubmit: (values) => handleRegister(values),
   });
 
-  // const categoryBtnStyles = {
-  //   bgcolor: "primary.main",
-  //   border: `1px solid ${theme.palette.primary.light}`,
-  //   borderRadius: "15px",
-  //   color: "white",
-  //   "&:hover": {
-  //     color: "primary",
-  //   },
-  // };
   return (
     <>
       <Container sx={{ paddingY: "2rem", mt: "64px" }}>

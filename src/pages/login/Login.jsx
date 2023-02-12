@@ -1,4 +1,3 @@
-import "./Login.css";
 import {
   Button,
   Divider,
@@ -23,7 +22,8 @@ import { useEffect, useState } from "react";
 import { loginValidationSchema } from "./loginValidationSchema";
 import { Twitter } from "@mui/icons-material";
 import Google from "../../assets/icons/google_icon.png";
-import { categoryBtnStyles } from "./styles";
+import { categoryBtnStyles } from "../../components/login/styles";
+import "./login.css";
 
 export default function Login() {
   const theme = useTheme();

@@ -1,15 +1,17 @@
 import React from "react";
 import { Box, Paper, Typography, Button, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@emotion/react";
 
 function PaymentConfirmation({ order }) {
-  const xs = useMediaQuery("(min-width:0)");
-  const sm = useMediaQuery("(min-width:600px)");
   const buttonStyles = {
     ":hover": { transition: "0.2s", color: "white" },
   };
+
   const navigate = useNavigate();
+  const theme = useTheme();
   const orderName = order._id;
+
   return (
     <>
       <Box mb={2}>
@@ -34,6 +36,7 @@ function PaymentConfirmation({ order }) {
       >
         <Paper
           sx={{
+            bgcolor: theme.palette.primary.main,
             width: { md: "70%", xs: "100%" },
             p: "20px",
             display: "flex",
@@ -43,36 +46,38 @@ function PaymentConfirmation({ order }) {
           }}
           elevation={4}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography sx={{ color: "primary.main" }}>Guitarrero</Typography>
-            <img
-              style={{
-                width: "40px",
-                position: "relative",
-                transform: "rotate(45deg)",
+          <Box sx={{ border: "thick double white", borderRadius: "5px" }} p={2}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
               }}
-              srcSet={require("../../assets/images/guitarreroGreen.png")}
-              alt="GuitarImage"
-            />
-          </Box>
-          <Box>
-            <Typography mb="20px" variant="h5">
-              Time to save money!
-            </Typography>
-            <Typography mb="20px" variant="h5">
-              SAVE $100 ON YOUR NEXT ORDER
-            </Typography>
-            <Typography mb="20px">
-              Thank you for your purchase. We have the feeling this is the
-              beginning of a beautiful friendship. So that we can get to know
-              each other a little better, we're offering you $100 off an order
-              of $500 or more!
-            </Typography>
+            >
+              <img
+                style={{
+                  width: "40px",
+                  position: "relative",
+                  transform: "rotate(45deg)",
+                  marginBottom: "1rem",
+                }}
+                srcSet={require("../../assets/images/guitarreroWithe.png")}
+                alt="GuitarImage"
+              />
+            </Box>
+            <Box>
+              <Typography mb="20px" variant="h5" color="white">
+                Time to save money!
+              </Typography>
+              <Typography mb="20px" variant="h5" color="white">
+                SAVE $100 ON YOUR NEXT ORDER
+              </Typography>
+              <Typography mb="20px" color="white">
+                Thank you for your purchase. We have the feeling this is the
+                beginning of a beautiful friendship. So that we can get to know
+                each other a little better, we're offering you $100 off an order
+                of $500 or more!
+              </Typography>
+            </Box>
           </Box>
         </Paper>
       </Box>

@@ -18,3 +18,12 @@ export const categoryBtnStyles = {
     color: "primary",
   },
 };
+
+export const categoryBtnStyle = {
+  bgcolor: "primary.main",
+  borderRadius: "15px",
+  color: "white",
+  "&:hover": {
+    color: "primary",
+  },
+};

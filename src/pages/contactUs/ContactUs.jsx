@@ -25,7 +25,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import { AddTask } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
-import { titleStyles } from "../muiStyles/muiStyles";
+import { titleStyles } from "../../style/muiStyles";
 
 function ContactUs() {
   const [firstName, setFirstName] = useState("");
