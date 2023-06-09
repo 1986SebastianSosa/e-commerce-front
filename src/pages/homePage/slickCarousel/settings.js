@@ -5,7 +5,7 @@ export const settings = {
   speed: 1000,
   slidesToShow: 5,
   slidesToScroll: 1,
-  autoplay: false,
+  autoplay: true,
   centerMode: true,
   adaptiveHeight: true,
   appendDots: (dots) => <ul style={{ padding: "1rem" }}>{dots}</ul>,
